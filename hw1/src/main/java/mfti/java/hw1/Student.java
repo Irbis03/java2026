@@ -9,9 +9,9 @@ import java.util.function.Function;
  */
 public class Student<T> {
     private String name;
-    private Deque<T> marks = new ArrayDeque<T>(0);
-    private Deque<T> correctMarks = new ArrayDeque<T>(0);
-    private final Stack<Runnable> undoStack = new Stack<>();
+    private List<T> marks = new ArrayList<T>(0);
+    private List<T> correctMarks = new ArrayList<T>(0);
+    private final Deque<Runnable> undoStack = new ArrayDeque<>(0);
 
     public Student(String name) {
         this.name = name;
@@ -98,7 +98,7 @@ public class Student<T> {
      * Can be called multiple times, until reaching initial state of Student.
      */
     public void undo() {
-        if (!undoStack.empty()) {
+        if (undoStack.size() != 0) {
             Runnable undoAction = undoStack.pop();
             undoAction.run();
         }
