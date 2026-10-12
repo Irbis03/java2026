@@ -42,6 +42,14 @@ public class Student<T> {
         undoStack.push(() -> this.name = oldName);
     }
 
+    public Deque<T> getMarks() {
+        return new ArrayDeque<T>(marks);
+    }
+
+    public Deque<T> getCorrectMarks() {
+        return new ArrayDeque<T>(correctMarks);
+    }
+
     public void addLastMark(T mark) {
         if (correctMarks.size() == 0 || correctMarks.contains(mark)) {
             marks.add(mark);
