@@ -48,11 +48,11 @@ public class StudentTest {
     {
         String name = "Liz";
         List<Integer> marks = new ArrayList<Integer>(List.of(3,4,5));
-        List<Integer> correct_marks = new ArrayList<Integer>(List.of(1,2,3,4,5));
-        Student<Integer> student = new Student<Integer>(name, marks, correct_marks);
+        List<Integer> correctMarks = new ArrayList<Integer>(List.of(1,2,3,4,5));
+        Student<Integer> student = new Student<Integer>(name, marks, correctMarks);
 
-        correct_marks = correct_marks.reversed();
-        for(Integer correct_mark: correct_marks) {
+        correctMarks = correctMarks.reversed();
+        for(Integer correct_mark: correctMarks) {
             Integer cur_correct_student_mark = student.popLastCorrectMark();
             Assertions.assertEquals(cur_correct_student_mark, correct_mark);
         }
@@ -63,8 +63,8 @@ public class StudentTest {
     {
         String name = "Liz";
         List<Integer> marks = new ArrayList<Integer>(List.of(3,4,5));
-        List<Integer> correct_marks = new ArrayList<Integer>(List.of(1,2,3,4));
-        assertThrows(IllegalArgumentException.class, () -> {new Student<Integer>(name, marks, correct_marks);});
+        List<Integer> correctMarks = new ArrayList<Integer>(List.of(1,2,3,4));
+        assertThrows(IllegalArgumentException.class, () -> {new Student<Integer>(name, marks, correctMarks);});
     }
 
     @Test
@@ -72,12 +72,16 @@ public class StudentTest {
     {
         String name = "Liz";
         List<Integer> marks = new ArrayList<Integer>(List.of(3,4,5));
-        List<Integer> correct_marks = new ArrayList<Integer>(List.of(1,2,3,4,5));
-        Student<Integer> student1 = new Student(name, marks, correct_marks);
+        List<Integer> correctMarks = new ArrayList<Integer>(List.of(1,2,3,4,5));
+        Student<Integer> student1 = new Student(name, marks, correctMarks);
+
+        System.out.print(student1);
 
         String name2 = "John";
-        Student<Integer> student2 = new Student(name2, marks, correct_marks);
+        Student<Integer> student2 = new Student(name2, marks, correctMarks);
         assertNotEquals(student1, student2);
+
+        System.out.print(student1);
     }
 
     @Test
@@ -85,11 +89,13 @@ public class StudentTest {
     {
         String name = "Liz";
         List<Integer> marks = new ArrayList<Integer>(List.of(3,4,5));
-        List<Integer> correct_marks = new ArrayList<Integer>(List.of(1,2,3,4,5));
-        Student<Integer> student1 = new Student(name, marks, correct_marks);
+        List<Integer> correctMarks = new ArrayList<Integer>(List.of(1,2,3,4,5));
+        Student<Integer> student1 = new Student(name, marks, correctMarks);
 
         String name2 = "Liz";
-        Student<Integer> student2 = new Student(name2, marks, correct_marks);
+        List<Integer> marks2 = new ArrayList<Integer>(List.of(3,4,5));
+        List<Integer> correctMarks2 = new ArrayList<Integer>(List.of(1,2,3,4,5));
+        Student<Integer> student2 = new Student(name2, marks2, correctMarks2);
         assertEquals(student1, student2);
     }
 
@@ -98,8 +104,8 @@ public class StudentTest {
     {
         String name = "Liz";
         List<Integer> marks = new ArrayList<Integer>(List.of(3,4,5));
-        List<Integer> correct_marks = new ArrayList<Integer>(List.of(1,2,3,4,5));
-        Student<Integer> student1 = new Student(name, marks, correct_marks);
+        List<Integer> correctMarks = new ArrayList<Integer>(List.of(1,2,3,4,5));
+        Student<Integer> student1 = new Student(name, marks, correctMarks);
 
         Integer mark = student1.popLastMark();
         Assertions.assertEquals(5, mark);
@@ -120,8 +126,8 @@ public class StudentTest {
     {
         String name = "Liz";
         List<Integer> marks = new ArrayList<Integer>(List.of(3,4,5));
-        List<Integer> correct_marks = new ArrayList<Integer>(List.of(1,2,3,4,5));
-        Student<Integer> student1 = new Student(name, marks, correct_marks);
+        List<Integer> correctMarks = new ArrayList<Integer>(List.of(1,2,3,4,5));
+        Student<Integer> student1 = new Student(name, marks, correctMarks);
 
         Integer correct_mark = student1.popLastCorrectMark();
         Assertions.assertEquals(5, correct_mark);
@@ -142,8 +148,8 @@ public class StudentTest {
     {
         String name = "Liz";
         List<Integer> marks = new ArrayList<Integer>(List.of(3,4,5));
-        List<Integer> correct_marks = new ArrayList<Integer>(List.of(1,2,3,4,5));
-        Student<Integer> student1 = new Student(name, marks, correct_marks);
+        List<Integer> correctMarks = new ArrayList<Integer>(List.of(1,2,3,4,5));
+        Student<Integer> student1 = new Student(name, marks, correctMarks);
 
         student1.addLastCorrectMark(2);
         Integer correct_mark = student1.popLastCorrectMark();
@@ -155,8 +161,8 @@ public class StudentTest {
     {
         String name = "Liz";
         List<Integer> marks = new ArrayList<Integer>(List.of(3,4,5));
-        List<Integer> correct_marks = new ArrayList<Integer>(List.of(1,2,3,4,5));
-        Student<Integer> student1 = new Student(name, marks, correct_marks);
+        List<Integer> correctMarks = new ArrayList<Integer>(List.of(1,2,3,4,5));
+        Student<Integer> student1 = new Student(name, marks, correctMarks);
 
         Integer mark = student1.popLastMark();
         student1.undo();
@@ -167,15 +173,15 @@ public class StudentTest {
     void testMap() {
         String name = "Liz";
         List<Integer> marks = new ArrayList<Integer>(List.of(2,3,4));
-        List<Integer> correct_marks = new ArrayList<Integer>(List.of(1,2,3,4,5));
-        Student<Integer> student = new Student(name, marks, correct_marks);
+        List<Integer> correctMarks = new ArrayList<Integer>(List.of(1,2,3,4,5));
+        Student<Integer> student = new Student(name, marks, correctMarks);
         Student<Integer> student2 = student.mapAllStudentMarks((
                 elem) -> elem + 1, (elem) -> elem + 1);
 
         String nameRes = "Liz";
         List<Integer> marksRes= new ArrayList<Integer>(List.of(3,4,5));
-        List<Integer> correct_marksRes = new ArrayList<Integer>(List.of(1,2,3,4,5));
-        Student<Integer> studentRes = new Student(nameRes,marksRes, correct_marksRes);
+        List<Integer> correctMarksRes = new ArrayList<Integer>(List.of(1,2,3,4,5));
+        Student<Integer> studentRes = new Student(nameRes,marksRes, correctMarksRes);
         assertEquals(studentRes, student2);
 
     }

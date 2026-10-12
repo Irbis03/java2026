@@ -10,7 +10,7 @@ import java.util.function.Function;
 public class Student<T> {
     private String name;
     private List<T> marks = new ArrayList<T>(0);
-    private List<T> correct_marks = new ArrayList<T>(0);
+    private List<T> correctMarks = new ArrayList<T>(0);
     private final Stack<Runnable> undoStack = new Stack<>();
 
     public Student(String name) {
@@ -22,10 +22,10 @@ public class Student<T> {
         this.marks.addAll(marks);
     }
 
-    public Student(String name, List<T> marks, List<T> correct_marks) {
+    public Student(String name, List<T> marks, List<T> correctMarks) {
         this.name = name;
 
-        this.correct_marks.addAll(correct_marks);
+        this.correctMarks.addAll(correctMarks);
 
         for(T mark: marks) {
             addLastMark(mark);
@@ -43,11 +43,11 @@ public class Student<T> {
     }
 
     public void addLastMark(T mark) {
-        if (correct_marks == null || correct_marks.contains(mark)) {
+        if (correctMarks == null || correctMarks.contains(mark)) {
             marks.add(mark);
             undoStack.push(() -> marks.removeLast());
         } else {
-            throw new IllegalArgumentException("incorrect mark: " + mark +";\tallowed marks: " + correct_marks);
+            throw new IllegalArgumentException("incorrect mark: " + mark +";\tallowed marks: " + correctMarks);
         }
     }
 
@@ -62,15 +62,15 @@ public class Student<T> {
     }
 
     public void addLastCorrectMark(T mark) {
-        correct_marks.add(mark);
-        undoStack.push(() -> correct_marks.removeLast());
+        correctMarks.add(mark);
+        undoStack.push(() -> correctMarks.removeLast());
     }
 
     public T popLastCorrectMark() {
-        if (!correct_marks.isEmpty()) {
-            T correct_mark = correct_marks.getLast();
-            undoStack.push(() -> correct_marks.add(correct_mark));
-            correct_marks.removeLast();
+        if (!correctMarks.isEmpty()) {
+            T correct_mark = correctMarks.getLast();
+            undoStack.push(() -> correctMarks.add(correct_mark));
+            correctMarks.removeLast();
             return correct_mark;
         }
         return null;
@@ -81,8 +81,8 @@ public class Student<T> {
      */
     public <R> Student<R> mapAllStudentMarks(Function<T, R> mapperMarks, Function<T, R> mapperCorrectMarks) {
         List<R> marks = this.marks.stream().map(mapperCorrectMarks).toList();
-        List<R> correct_marks = this.correct_marks.stream().map(mapperCorrectMarks).toList();
-        return new Student<R>(name, marks, correct_marks);
+        List<R> correctMarks = this.correctMarks.stream().map(mapperCorrectMarks).toList();
+        return new Student<R>(name, marks, correctMarks);
     }
 
     /**
@@ -105,6 +105,11 @@ public class Student<T> {
         Student<T> other = (Student<T>) o;
 
         return name.equals(other.name) && marks.equals(other.marks);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, marks);
     }
 
     @Override
