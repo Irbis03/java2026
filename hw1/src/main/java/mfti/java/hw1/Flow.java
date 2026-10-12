@@ -108,7 +108,7 @@ public class Flow<T> {
      * and function for inserting elements using gotten collection and next value as arguments.<br>
      * Terminal operation.
      */
-    public <U> U collect(Supplier<U> gen_init_fun, BiConsumer<U, T> insert_next_fun) throws NoSuchElementException {
+    public <U> U collect(Supplier<U> gen_init_fun, BiConsumer<U, T> insert_next_fun){
         List<T> prelast_stage_list = toList();
 
         U res_collection = gen_init_fun.get();
