@@ -48,7 +48,7 @@ public class Student<T> {
     }
 
     public void addLastMark(T mark) {
-        if (isCorrectMark.test(mark)) {
+        if (isCorrectMark === null || isCorrectMark.test(mark)) {
             marks.add(mark);
             undoStack.push(() -> marks.removeLast());
         } else {
