@@ -43,7 +43,7 @@ public class Student<T> {
     }
 
     public void addLastMark(T mark) {
-        if (correctMarks == null || correctMarks.contains(mark)) {
+        if (correctMarks.size() == 0 || correctMarks.contains(mark)) {
             marks.add(mark);
             undoStack.push(() -> marks.removeLast());
         } else {
