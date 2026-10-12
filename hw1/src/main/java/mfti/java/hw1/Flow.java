@@ -16,7 +16,7 @@ import java.util.function.Supplier;
  * @param <T> - type of elements of Flow.
  */
 public class Flow<T> {
-    private Iterator iterator;
+    private Iterator<T> iterator;
     private List<Function> commands = new ArrayList<>();
     private List<NonTerminalOperationType> commandsType = new ArrayList<>();
 
