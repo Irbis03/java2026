@@ -2,6 +2,7 @@ package mfti.java.hw1;
 
 import java.util.*;
 import java.util.function.Function;
+import java.util.function.Predicate;
 
 /**
  * Student can store name with marks and rules for correct marks.<br>
@@ -10,7 +11,7 @@ import java.util.function.Function;
 public class Student<T> {
     private String name;
     private List<T> marks = new ArrayList<T>(0);
-    private List<T> correctMarks = new ArrayList<T>(0);
+    private Predicate<T> isCorrectMark;
     private final Deque<Runnable> undoStack = new ArrayDeque<>(0);
 
     public Student(String name) {
@@ -22,7 +23,7 @@ public class Student<T> {
         this.marks.addAll(marks);
     }
 
-    public Student(String name, List<T> marks, List<T> correctMarks) {
+    public Student(String name, List<T> marks, Predicate<T> isCorrectMark) {
         this.name = name;
 
         this.correctMarks.addAll(correctMarks);
@@ -42,12 +43,12 @@ public class Student<T> {
         undoStack.push(() -> this.name = oldName);
     }
 
-    public Deque<T> getMarks() {
-        return new ArrayDeque<T>(marks);
+    public List<T> getMarks() {
+        return new ArrayList<T>(marks);
     }
 
-    public Deque<T> getCorrectMarks() {
-        return new ArrayDeque<T>(correctMarks);
+    public List<T> getCorrectMarks() {
+        return new ArrayList<T>(correctMarks);
     }
 
     public void addLastMark(T mark) {
