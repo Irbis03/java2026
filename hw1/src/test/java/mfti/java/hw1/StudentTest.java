@@ -70,6 +70,18 @@ public class StudentTest {
     }
 
     @Test
+    void testStudentAddingMarkWithoutCorrectMarks()
+    {
+        String name = "Liz";
+        List<Integer> marks = new ArrayList<Integer>(List.of(3,4,5));
+        Student<Integer> student = new Student<Integer>(name, marks);
+
+        student.addLastMark(4);
+
+        Assertions.assertEquals(4, student.popLastMark());
+    }
+
+    @Test
     void testNotEqualStudents()
     {
         String name = "Liz";
