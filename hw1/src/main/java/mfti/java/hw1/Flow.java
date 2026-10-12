@@ -38,7 +38,7 @@ public class Flow<T> {
         }
 
         public boolean hasNext() {
-            return end_val != new_val;
+            return !end_val.equals(new_val);
         }
 
         public T next() {
