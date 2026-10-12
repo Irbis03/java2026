@@ -81,7 +81,7 @@ public class Flow<T> {
      * Function filters list using predicate function.<br>
      * Not terminal operation.
      */
-    public<R> Flow<T> filter(Function<T, R> fun) {
+    public Flow<T> filter(Function<T, Boolean> fun) {
         commands.add(fun);
         commandsType.add(NonTerminalOperationType.FILTER);
         return this;
