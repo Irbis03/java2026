@@ -2,7 +2,7 @@ package mfti.java.hw1;
 
 import java.util.*;
 import java.util.function.BiConsumer;
-import java.util.function.BiFunction;
+import java.util.function.BinaryOperator;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -93,7 +93,7 @@ public class Flow<T> {
      * Return accumulated value.<br>
      * Terminal operation.
      */
-    public T reduce(BiFunction<T, T, T> fun) throws NoSuchElementException {
+    public T reduce(BinaryOperator<T> fun) throws NoSuchElementException {
         List<T> prelast_stage_list = toList();
 
         T accumulate = prelast_stage_list.getFirst();
