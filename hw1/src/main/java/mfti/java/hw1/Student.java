@@ -2,6 +2,7 @@ package mfti.java.hw1;
 
 import java.util.*;
 import java.util.function.Function;
+import java.util.function.Predicate;
 
 /**
  * Student can store name with marks and rules for correct marks.<br>
@@ -10,7 +11,7 @@ import java.util.function.Function;
 public class Student<T> {
     private String name;
     private List<T> marks = new ArrayList<T>(0);
-    private List<T> correctMarks = new ArrayList<T>(0);
+    private Predicate<T> isCorrectMark = null;
     private final Deque<Runnable> undoStack = new ArrayDeque<>(0);
 
     public Student(String name) {
@@ -22,10 +23,10 @@ public class Student<T> {
         this.marks.addAll(marks);
     }
 
-    public Student(String name, List<T> marks, List<T> correctMarks) {
+    public Student(String name, List<T> marks, Predicate<T> isCorrectMark) {
         this.name = name;
 
-        this.correctMarks.addAll(correctMarks);
+        this.isCorrectMark = isCorrectMark;
 
         for(T mark: marks) {
             addLastMark(mark);
@@ -46,16 +47,12 @@ public class Student<T> {
         return new ArrayList<T>(marks);
     }
 
-    public List<T> getCorrectMarks() {
-        return new ArrayList<T>(correctMarks);
-    }
-
     public void addLastMark(T mark) {
-        if (correctMarks.size() == 0 || correctMarks.contains(mark)) {
+        if (isCorrectMark.test(mark)) {
             marks.add(mark);
             undoStack.push(() -> marks.removeLast());
         } else {
-            throw new IllegalArgumentException("incorrect mark: " + mark +";\tallowed marks: " + correctMarks);
+            throw new IllegalArgumentException("incorrect mark: " + mark);
         }
     }
 
@@ -69,28 +66,12 @@ public class Student<T> {
         return null;
     }
 
-    public void addLastCorrectMark(T mark) {
-        correctMarks.add(mark);
-        undoStack.push(() -> correctMarks.removeLast());
-    }
-
-    public T popLastCorrectMark() {
-        if (!correctMarks.isEmpty()) {
-            T correct_mark = correctMarks.getLast();
-            undoStack.push(() -> correctMarks.add(correct_mark));
-            correctMarks.removeLast();
-            return correct_mark;
-        }
-        return null;
-    }
-
     /**
      * This function can transform lists of marks and correct marks with its own conditions.
      */
-    public <R> Student<R> mapAllStudentMarks(Function<T, R> mapperMarks, Function<T, R> mapperCorrectMarks) {
-        List<R> marks = this.marks.stream().map(mapperCorrectMarks).toList();
-        List<R> correctMarks = this.correctMarks.stream().map(mapperCorrectMarks).toList();
-        return new Student<R>(name, marks, correctMarks);
+    public <R> Student<R> mapAllStudentMarks(Function<T, R> mapperMarks, Predicate<R> isCorrectMark) {
+        List<R> marks = this.marks.stream().map(mapperMarks).toList();
+        return new Student<R>(name, marks, isCorrectMark);
     }
 
     /**

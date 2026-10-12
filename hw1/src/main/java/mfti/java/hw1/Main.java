@@ -1,6 +1,7 @@
 package mfti.java.hw1;
 
 import java.util.*;
+import java.util.function.Predicate;
 
 /**
  * Main has some usual scenarios of using Student and Flow
@@ -9,21 +10,22 @@ public class Main {
     static void main() {
         // 1. Student
         // Student creature with acceptable marks
-        Student<Integer> student = new Student<Integer>("Liz", List.of(4, 5), List.of(1, 2, 3, 4, 5));
+        Predicate<Integer> isCorectMark = mark -> mark >= 1 && mark <= 5;
+        Student<Integer> student = new Student<Integer>("Liz", List.of(4, 5), isCorectMark);
 
         // Student creature with wrong marks
         try {
-            Student<Integer> student2 = new Student<Integer>("Mike", List.of(4, 6), List.of(1, 2, 3, 4, 5));
+            Student<Integer> student2 = new Student<Integer>("Mike", List.of(4, 6), isCorectMark);
         } catch (IllegalArgumentException e) {
             String errMessage = e.getMessage();
         }
 
         // Equals student
-        Student<Integer> studentCopy = new Student<Integer>("Liz", List.of(4, 5), List.of(1, 2, 3, 4, 5));
+        Student<Integer> studentCopy = new Student<Integer>("Liz", List.of(4, 5), isCorectMark);
         boolean resEq = student.equals(studentCopy);
 
         // Not equals student
-        Student<Integer> student2 = new Student<Integer>("John", List.of(4, 5), List.of(1, 2, 3, 4, 5));
+        Student<Integer> student2 = new Student<Integer>("John", List.of(4, 5), isCorectMark);
         boolean resNotEq = student.equals(student2);
 
         // Student adding new right mark
@@ -43,7 +45,8 @@ public class Main {
         student.undo();
 
         // Student transform marks from Integer to String
-        student.mapAllStudentMarks((elem) -> String.valueOf(elem), (elem) -> String.valueOf(elem));
+        student.mapAllStudentMarks((elem) -> String.valueOf(elem), (elem) -> Integer.parseInt(elem) >= 1 &&
+                Integer.parseInt(elem) <= 5);
 
         // 2. Flow
         // Create flow using List

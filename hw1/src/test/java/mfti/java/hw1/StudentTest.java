@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -36,11 +37,18 @@ public class StudentTest {
         List<Integer> marks = new ArrayList<Integer>(List.of(3,4,5));
         Student<Integer> student = new Student<Integer>(name, marks);
 
-        marks = marks.reversed();
-        for(Integer mark: marks) {
-            Integer cur_student_mark = student.popLastMark();
-            Assertions.assertEquals(cur_student_mark, mark);
-        }
+        Assertions.assertEquals(marks, student.getMarks());
+    }
+
+    @Test
+    void testStudentPopMark()
+    {
+        String name = "Liz";
+        List<Integer> marks = new ArrayList<Integer>(List.of(3,4,5));
+        Student<Integer> student = new Student<Integer>(name, marks);
+
+        Integer lastMark = student.popLastMark();
+        Assertions.assertEquals(5, lastMark);
     }
 
     @Test
@@ -48,14 +56,8 @@ public class StudentTest {
     {
         String name = "Liz";
         List<Integer> marks = new ArrayList<Integer>(List.of(3,4,5));
-        List<Integer> correctMarks = new ArrayList<Integer>(List.of(1,2,3,4,5));
-        Student<Integer> student = new Student<Integer>(name, marks, correctMarks);
-
-        correctMarks = correctMarks.reversed();
-        for(Integer correct_mark: correctMarks) {
-            Integer cur_correct_student_mark = student.popLastCorrectMark();
-            Assertions.assertEquals(cur_correct_student_mark, correct_mark);
-        }
+        Predicate<Integer> isCorrectMark = mark -> mark >= 1 && mark <= 5;
+        Student<Integer> student = assertDoesNotThrow(() -> new Student<Integer>(name, marks, isCorrectMark));
     }
 
     @Test
@@ -63,8 +65,8 @@ public class StudentTest {
     {
         String name = "Liz";
         List<Integer> marks = new ArrayList<Integer>(List.of(3,4,5));
-        List<Integer> correctMarks = new ArrayList<Integer>(List.of(1,2,3,4));
-        assertThrows(IllegalArgumentException.class, () -> {new Student<Integer>(name, marks, correctMarks);});
+        Predicate<Integer> isCorrectMark = mark -> mark >= 1 && mark <= 4;
+        assertThrows(IllegalArgumentException.class, () -> new Student<Integer>(name, marks, isCorrectMark));
     }
 
     @Test
@@ -72,13 +74,13 @@ public class StudentTest {
     {
         String name = "Liz";
         List<Integer> marks = new ArrayList<Integer>(List.of(3,4,5));
-        List<Integer> correctMarks = new ArrayList<Integer>(List.of(1,2,3,4,5));
-        Student<Integer> student1 = new Student(name, marks, correctMarks);
+        Predicate<Integer> isCorrectMark = mark -> mark >= 1 && mark <= 5;
+        Student<Integer> student1 = new Student(name, marks, isCorrectMark);
 
         System.out.print(student1);
 
         String name2 = "John";
-        Student<Integer> student2 = new Student(name2, marks, correctMarks);
+        Student<Integer> student2 = new Student(name2, marks, isCorrectMark);
         assertNotEquals(student1, student2);
 
         System.out.print(student1);
@@ -89,13 +91,13 @@ public class StudentTest {
     {
         String name = "Liz";
         List<Integer> marks = new ArrayList<Integer>(List.of(3,4,5));
-        List<Integer> correctMarks = new ArrayList<Integer>(List.of(1,2,3,4,5));
-        Student<Integer> student1 = new Student(name, marks, correctMarks);
+        Predicate<Integer> isCorrectMark = mark -> mark >= 1 && mark <= 5;
+        Student<Integer> student1 = new Student(name, marks, isCorrectMark);
 
         String name2 = "Liz";
         List<Integer> marks2 = new ArrayList<Integer>(List.of(3,4,5));
-        List<Integer> correctMarks2 = new ArrayList<Integer>(List.of(1,2,3,4,5));
-        Student<Integer> student2 = new Student(name2, marks2, correctMarks2);
+        Predicate<Integer> isCorrectMark2 = mark -> mark >= 1 && mark <= 5;
+        Student<Integer> student2 = new Student(name2, marks2, isCorrectMark2);
         assertEquals(student1, student2);
     }
 
@@ -104,8 +106,8 @@ public class StudentTest {
     {
         String name = "Liz";
         List<Integer> marks = new ArrayList<Integer>(List.of(3,4,5));
-        List<Integer> correctMarks = new ArrayList<Integer>(List.of(1,2,3,4,5));
-        Student<Integer> student1 = new Student(name, marks, correctMarks);
+        Predicate<Integer> isCorrectMark = mark -> mark >= 1 && mark <= 5;
+        Student<Integer> student1 = new Student(name, marks, isCorrectMark);
 
         Integer mark = student1.popLastMark();
         Assertions.assertEquals(5, mark);
@@ -122,47 +124,12 @@ public class StudentTest {
     }
 
     @Test
-    void testRemovingCorrectMark()
-    {
-        String name = "Liz";
-        List<Integer> marks = new ArrayList<Integer>(List.of(3,4,5));
-        List<Integer> correctMarks = new ArrayList<Integer>(List.of(1,2,3,4,5));
-        Student<Integer> student1 = new Student(name, marks, correctMarks);
-
-        Integer correct_mark = student1.popLastCorrectMark();
-        Assertions.assertEquals(5, correct_mark);
-    }
-
-    @Test
-    void testRemovingCorrectMarkFromEmptyStudent()
-    {
-        String name = "Liz";
-        Student<Integer> student1 = new Student(name);
-
-        Integer correct_mark = student1.popLastCorrectMark();
-        Assertions.assertEquals(null, correct_mark);
-    }
-
-    @Test
-    void testAddingCorrectMark()
-    {
-        String name = "Liz";
-        List<Integer> marks = new ArrayList<Integer>(List.of(3,4,5));
-        List<Integer> correctMarks = new ArrayList<Integer>(List.of(1,2,3,4,5));
-        Student<Integer> student1 = new Student(name, marks, correctMarks);
-
-        student1.addLastCorrectMark(2);
-        Integer correct_mark = student1.popLastCorrectMark();
-        Assertions.assertEquals(2, correct_mark);
-    }
-
-    @Test
     void testUndo()
     {
         String name = "Liz";
         List<Integer> marks = new ArrayList<Integer>(List.of(3,4,5));
-        List<Integer> correctMarks = new ArrayList<Integer>(List.of(1,2,3,4,5));
-        Student<Integer> student1 = new Student(name, marks, correctMarks);
+        Predicate<Integer> isCorrectMark = mark -> mark >= 1 && mark <= 5;
+        Student<Integer> student1 = new Student(name, marks, isCorrectMark);
 
         Integer mark = student1.popLastMark();
         student1.undo();
@@ -173,15 +140,15 @@ public class StudentTest {
     void testMap() {
         String name = "Liz";
         List<Integer> marks = new ArrayList<Integer>(List.of(2,3,4));
-        List<Integer> correctMarks = new ArrayList<Integer>(List.of(1,2,3,4,5));
-        Student<Integer> student = new Student(name, marks, correctMarks);
+        Predicate<Integer> isCorrectMark = mark -> mark >= 1 && mark <= 5;
+        Student<Integer> student = new Student(name, marks, isCorrectMark);
         Student<Integer> student2 = student.mapAllStudentMarks((
-                elem) -> elem + 1, (elem) -> elem + 1);
+                elem) -> elem + 1, isCorrectMark);
 
         String nameRes = "Liz";
         List<Integer> marksRes= new ArrayList<Integer>(List.of(3,4,5));
-        List<Integer> correctMarksRes = new ArrayList<Integer>(List.of(1,2,3,4,5));
-        Student<Integer> studentRes = new Student(nameRes,marksRes, correctMarksRes);
+        Predicate<Integer> isCorrectMarkRes = mark -> mark >= 1 && mark <= 5;
+        Student<Integer> studentRes = new Student(nameRes,marksRes, isCorrectMarkRes);
         assertEquals(studentRes, student2);
 
     }
