@@ -112,12 +112,33 @@ public class Student<T> {
 
         Student<T> other = (Student<T>) o;
 
-        return name.equals(other.name) && marks.equals(other.marks);
+        if (!name.equals(other.name)) return false;
+
+        // compare marks
+        if (marks.size() != other.marks.size()) return false;
+
+        Iterator<T> it = marks.iterator();
+        Iterator<T> itO = other.marks.iterator();
+
+        while(it.hasNext()) {
+            if (!Objects.equals(it.next(), itO.next())) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, marks);
+        int result = Objects.hash(name);
+
+        int marksHash = 1;
+        for (T mark : marks) {
+            marksHash = 31 * marksHash + (mark != null ? mark.hashCode() : 0);
+        }
+
+        return 31 * result + marksHash;
     }
 
     @Override
