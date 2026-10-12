@@ -9,8 +9,8 @@ import java.util.function.Function;
  */
 public class Student<T> {
     private String name;
-    private List<T> marks = new ArrayList<T>(0);
-    private List<T> correctMarks = new ArrayList<T>(0);
+    private Deque<T> marks = new ArrayDeque<T>(0);
+    private Deque<T> correctMarks = new ArrayDeque<T>(0);
     private final Stack<Runnable> undoStack = new Stack<>();
 
     public Student(String name) {
